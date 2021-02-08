@@ -1,0 +1,9 @@
+*.vs/
+*.csproj.user
+*.suo
+bin
+obj
+packages
+node_modules
+Server/LiveDashboards/
+Server/Cache/download.sqlite
