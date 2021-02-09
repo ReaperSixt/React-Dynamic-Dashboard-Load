@@ -1,5 +1,5 @@
 .sidenav {
-    width: 140px;
+    width: 160px;
     position: fixed;
     z-index: 1;
     left: 10px;
@@ -9,7 +9,7 @@
   }
   
   .sidenav Button {
-    padding: 6px 8px 6px 16px;
+    margin: 5px;
     /* text-decoration: none;
     font-size: 25px;
     color: #2196F3;
@@ -30,14 +30,3 @@
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
   }
-
-  /* .sidenavHeader {
-    width: 140px;
-    z-index: 1;
-    left: -130px;
-    position: fixed;
-    background: white;
-    overflow-x: hidden;
-    padding: 8px 0
-  } 
-  */

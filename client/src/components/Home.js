@@ -7,18 +7,15 @@ const $ = window.$;
 export class Home extends Component {
   static displayName = Home.name;
   dashboards = null;
+  pathToServer = "http://" + window.location.hostname + ":8080" + "/Dashboards/GetDashboardsNames";
 
   constructor(props) {
     super(props);
-    let pathToServer = "http://" + window.location.hostname + ":8080" + "/Dashboards/GetDashboardsNames"
 
     this.loadDashboard = this.loadDashboard.bind(this);
-    fetch(pathToServer).then(r => {
-      r.json().then(json => {
-        this.dashboards = json;
-        this.rendederAvailableDashboards(this.dashboards);
-      });
-    });
+    this.updateAvailableDashboards = this.updateAvailableDashboards.bind(this);;
+
+    this.updateAvailableDashboards();
   }
 
   rendederAvailableDashboards(dashboardNames) {
@@ -28,7 +25,9 @@ export class Home extends Component {
 
     const element =
       <div>
-        <h5 class="sidenavHeader">Dashboards</h5>
+        <Button onClick={this.updateAvailableDashboards}>Refresh</Button>
+        <Button>+</Button>
+        <h5 class="sidenavHeader">Dashboards:</h5>
         {listItems}
       </div>;
 
@@ -45,6 +44,15 @@ export class Home extends Component {
       },
       (error) => console.log(error)
     );
+  }
+
+  updateAvailableDashboards() {
+    fetch(this.pathToServer).then(r => {
+      r.json().then(json => {
+        this.dashboards = json;
+        this.rendederAvailableDashboards(this.dashboards);
+      });
+    });
   }
 
   render() {
