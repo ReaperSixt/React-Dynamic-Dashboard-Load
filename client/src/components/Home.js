@@ -41,6 +41,7 @@ export class Home extends Component {
       (dashboard) => {
         var v = new $.ig.RevealView("#revealView");
         v.canEdit = false;
+        v.canSaveAs = false;
         v.dashboard = dashboard;
       },
       (error) => console.log(error)
