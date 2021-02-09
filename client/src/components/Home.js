@@ -39,9 +39,7 @@ export class Home extends Component {
     $.ig.RevealUtility.loadDashboard(
       dashboardId,
       (dashboard) => {
-        var v = new $.ig.RevealView("#revealView");
-        v.canEdit = false;
-        v.canSaveAs = false;
+        let v = this.setupRevealViewForViewing();
         v.dashboard = dashboard;
       },
       (error) => console.log(error)
@@ -76,8 +74,7 @@ export class Home extends Component {
 
   createNewDashboard() {
     var home = this;
-    var v = new $.ig.RevealView("#revealView");
-    v.startInEditMode = true;
+    var v = this.setupRevealViewForCreating();
     v.onDataSourcesRequested = function (callback) {
 
       var rsDsi = new $.ig.RVLocalFileDataSourceItem();
@@ -111,6 +108,28 @@ export class Home extends Component {
     }
     v.dashboard = new $.ig.RVDashboard();
 
+  }
+
+  setupRevealViewForViewing() {
+    var v = new $.ig.RevealView("#revealView");
+    v.canEdit = false;
+    v.canSaveAs = false;
+
+    //The following commented out code disables the expots
+    // v.showExportImage = false;
+    // v.showExportToExcel = false;
+    // v.showExportToPowerpoint = false;
+    // v.showExportToPDF = false;
+
+    return v;
+  }
+  setupRevealViewForCreating() {
+    var v = new $.ig.RevealView("#revealView");
+    v.startInEditMode = true;
+    v.canEdit = true;
+    v.canSaveAs = false;
+
+    return v;
   }
 
   render() {
