@@ -40,6 +40,7 @@ export class Home extends Component {
       dashboardId,
       (dashboard) => {
         var v = new $.ig.RevealView("#revealView");
+        v.canEdit = false;
         v.dashboard = dashboard;
         console.log("Loaded");
       },
