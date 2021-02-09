@@ -42,7 +42,6 @@ export class Home extends Component {
         var v = new $.ig.RevealView("#revealView");
         v.canEdit = false;
         v.dashboard = dashboard;
-        console.log("Loaded");
       },
       (error) => console.log(error)
     );
@@ -70,10 +69,6 @@ export class Home extends Component {
 
     const r = await fetch(this.pathToServer);
     return await r.json().then(json => {
-      console.log("Json:" + json);
-      console.log("dashboardName:" + dashboardName);
-      console.log("includes: " + json.includes(dashboardName));
-
       return !json.includes(dashboardName);
     });
   }
