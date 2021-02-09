@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using DynamicDashboardLoad.Server.RevealSdk;
+using DynamicDashboardLoad.Server.Services;
 
 namespace DynamicDashboardLoad.Server
 {
@@ -24,9 +25,8 @@ namespace DynamicDashboardLoad.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
-            services.AddCors();
+            var dashbaordPersispanceService = new DashboardPersistanceService();
+            services.AddSingleton<IDashboardPersistanceService>(dashbaordPersispanceService);
 
             var embedSettings = new RevealEmbedSettings();
             embedSettings.LocalFileStoragePath = GetLocalFileStoragePath(_webRootPath);
@@ -37,7 +37,7 @@ namespace DynamicDashboardLoad.Server
             embedSettings.CachePath = cacheFilePath;
             services.AddRevealServices(embedSettings, CreateSdkContext());
 
-            services.AddMvc().AddNewtonsoftJson();
+            services.AddControllers().AddReveal();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,7 +59,9 @@ namespace DynamicDashboardLoad.Server
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "Home/About",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
 
