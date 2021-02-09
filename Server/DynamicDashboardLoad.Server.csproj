@@ -6,9 +6,13 @@
 
   <ItemGroup>
     <Compile Remove="Cache\**" />
+    <Compile Remove="LiveDashboards\**" />
     <Content Remove="Cache\**" />
+    <Content Remove="LiveDashboards\**" />
     <EmbeddedResource Remove="Cache\**" />
+    <EmbeddedResource Remove="LiveDashboards\**" />
     <None Remove="Cache\**" />
+    <None Remove="LiveDashboards\**" />
   </ItemGroup>
 
   <ItemGroup>

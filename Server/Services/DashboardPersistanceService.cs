@@ -46,7 +46,7 @@ namespace DynamicDashboardLoad.Server.Services
 
             using (var output = File.Open(rdashTargetPath, FileMode.Create))
             {
-                await(await dashboard.SerializeAsync()).CopyToAsync(output);
+                await (await dashboard.SerializeAsync()).CopyToAsync(output);
             }
         }
 
@@ -63,30 +63,24 @@ namespace DynamicDashboardLoad.Server.Services
 
         private void EnsureLiveDashboards()
         {
-            if (Directory.Exists(_liveDashboardsLocation) && Directory.EnumerateFiles(_liveDashboardsLocation).Any())
-            {
-                Console.WriteLine("Dashboards present!");
-            }
-            else
-            {
-                Directory.CreateDirectory(_liveDashboardsLocation);
-                Console.WriteLine("Dashboards missing. Initializing!");
-                var assembly = Assembly.GetExecutingAssembly();
-                var embeddedResources = assembly.GetManifestResourceNames();
 
-                foreach (var rdashPath in embeddedResources.Where(path => path.Contains(".rdash")))
+            Directory.CreateDirectory(_liveDashboardsLocation);
+            var assembly = Assembly.GetExecutingAssembly();
+            var embeddedResources = assembly.GetManifestResourceNames();
+
+            foreach (var rdashPath in embeddedResources.Where(path => path.Contains(".rdash")))
+            {
+                var stream = assembly.GetManifestResourceStream(rdashPath);
+                var fileNameParts = rdashPath.Split('.');
+                var fileName = fileNameParts[fileNameParts.Length - 2] + ".rdash";
+
+                var fullPath = Path.Combine(_liveDashboardsLocation, fileName);
+                using (var output = File.Open(fullPath, FileMode.Create))
                 {
-                    var stream = assembly.GetManifestResourceStream(rdashPath);
-                    var fileNameParts = rdashPath.Split('.');
-                    var fileName = fileNameParts[fileNameParts.Length - 2] + ".rdash";
-
-                    var fullPath = Path.Combine(_liveDashboardsLocation, fileName);
-                    using (var output = File.Open(fullPath, FileMode.Create))
-                    {
-                        stream.CopyTo(output);
-                    }
+                    stream.CopyTo(output);
                 }
             }
+
         }
 
         private string ExtractFileName(string filePath)

@@ -6,4 +6,4 @@ obj
 packages
 node_modules
 Server/LiveDashboards/
-Server/Cache/download.sqlite
+Server/Cache/

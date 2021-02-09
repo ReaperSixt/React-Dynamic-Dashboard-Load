@@ -13,29 +13,23 @@ namespace DynamicDashboardLoad.Server.RevealSdk
         public RevealSdkContext()
         {
             var liveDashboardsLocation = "LiveDashboards/";
-            if (Directory.Exists(liveDashboardsLocation))
-            {
-                Console.WriteLine("Dashboards present!");
 
-            }
-            else
-            {
-                Directory.CreateDirectory(liveDashboardsLocation);
-                Console.WriteLine("Dahboards missing. Initializing!");
-                var assembly = Assembly.GetExecutingAssembly();
-                var embeddedResources = assembly.GetManifestResourceNames();
+            Directory.CreateDirectory(liveDashboardsLocation);
+            //Console.WriteLine("Dahboards missing. Initializing!");
+            var assembly = Assembly.GetExecutingAssembly();
+            var embeddedResources = assembly.GetManifestResourceNames();
 
-                foreach (var rdashPath in embeddedResources.Where(path => path.Contains(".rdash")))
+            foreach (var rdashPath in embeddedResources.Where(path => path.Contains(".rdash")))
+            {
+                var stream = assembly.GetManifestResourceStream(rdashPath);
+                var fileName = rdashPath.Split('.').Skip(3).First() + ".rdash";
+                var fullPath = Path.Combine(liveDashboardsLocation, fileName);
+                using (var output = File.Open(fullPath, FileMode.Create))
                 {
-                    var stream = assembly.GetManifestResourceStream(rdashPath);
-                    var fileName = rdashPath.Split('.').Skip(3).First() + ".rdash";
-                    var fullPath = Path.Combine(liveDashboardsLocation, fileName);
-                    using (var output = File.Open(fullPath, FileMode.Create))
-                    {
-                        stream.CopyTo(output);
-                    }
+                    stream.CopyTo(output);
                 }
             }
+
         }
         public override IRVDataSourceProvider DataSourceProvider => null;
 
@@ -59,7 +53,7 @@ namespace DynamicDashboardLoad.Server.RevealSdk
         }
 
         public override async Task SaveDashboardAsync(string userId, string dashboardId, Dashboard dashboard)
-        { 
+        {
             var liveDashboardsLocation = "LiveDashboards/";
             var rdashTargetPath = Path.Combine(liveDashboardsLocation, dashboardId + ".rdash");
 
